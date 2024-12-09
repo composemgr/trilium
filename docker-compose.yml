@@ -1,0 +1,17 @@
+name: trillium
+services:
+  app:
+    image: zadam/trilium:latest
+    container_name: trilium-app
+    restart: always
+    ports:
+      - '172.17.0.1:59075:8080'
+    volumes:
+      - /var/lib/srv/${USER}/docker/zadam/trilium/latest/rootfs/data/trilium:/home/node/trilium-data
+    networks:
+      - trillium
+
+networks:
+  trillium:
+    name: trillium
+    external: false
