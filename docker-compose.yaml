@@ -1,0 +1,28 @@
+# nginx proxy address - http://172.17.0.1:59075
+
+name: trilium
+x-logging: &default-logging
+  options:
+    max-size: '5m'
+    max-file: '1'
+  driver: json-file
+
+services:
+  app:
+    image: zadam/trilium:latest
+    container_name: trilium-app
+    hostname: trilium
+    restart: always
+    pull_policy: always
+    logging: *default-logging
+    ports:
+      - '172.17.0.1:59075:8080'
+    volumes:
+      - './rootfs/data/trilium:/home/node/trilium-data'
+    networks:
+      - trilium
+
+networks:
+  trilium:
+    name: trilium
+    external: false
