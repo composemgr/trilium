@@ -45,7 +45,7 @@ See `docker-compose.yaml` for complete list of configurable options.
 
 ## 📂 Volumes
 
-- `./rootfs/data/trilium` - Data storage
+- `./volumes/data/trilium` - Data storage
 
 ## 🔍 Logging
 
