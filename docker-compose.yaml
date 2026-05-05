@@ -18,7 +18,7 @@ services:
     ports:
       - '172.17.0.1:59075:8080'
     volumes:
-      - './rootfs/data/trilium:/home/node/trilium-data'
+      - './volumes/data/trilium:/home/node/trilium-data'
     networks:
       - trilium
 
