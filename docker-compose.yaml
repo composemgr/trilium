@@ -17,14 +17,38 @@ services:
     logging: *default-logging
     environment:
       TZ: ${TZ:-America/New_York}
+      CONTAINER_NAME: trilium-app
+      HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
     ports:
       - '172.17.0.1:59075:8080'
     volumes:
       - './volumes/data/trilium:/home/node/trilium-data'
     networks:
       - trilium
+      - proxy
+      - cloudflare
+    labels:
+      - 'traefik.enable=true'
+      - 'cloudflare.enable=true'
+      - 'traefik.docker.network=proxy'
+      - 'cloudflare.service=http://trilium-app:8080'
+      - 'cloudflare.hostname=trilium.${CLOUDFLARE_ZONE_NAME:-}'
+      - 'traefik.http.routers.trilium-app.entrypoints=http'
+      - 'traefik.http.routers.trilium-app-secure.tls=true'
+      - 'traefik.http.routers.trilium-app.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
+      - 'traefik.http.middlewares.trilium-app-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.trilium-app.middlewares=trilium-app-https-redirect'
+      - 'traefik.http.routers.trilium-app-secure.entrypoints=https'
+      - 'traefik.http.routers.trilium-app-secure.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
+      - 'traefik.http.routers.trilium-app-secure.tls.certresolver=cloudflare'
+      - 'traefik.http.routers.trilium-app-secure.service=trilium-app'
+      - 'traefik.http.services.trilium-app.loadbalancer.server.port=8080'
 
 networks:
   trilium:
     name: trilium
     external: false
+  proxy:
+    external: true
+  cloudflare:
+    external: true
