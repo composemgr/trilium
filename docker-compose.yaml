@@ -9,7 +9,7 @@ x-logging: &default-logging
 
 services:
   app:
-    image: zadam/trilium:latest
+    image: triliumnext/notes:latest
     container_name: trilium-app
     hostname: ${BASE_HOST_NAME:-$HOSTNAME}
     restart: always
