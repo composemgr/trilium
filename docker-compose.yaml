@@ -11,10 +11,12 @@ services:
   app:
     image: zadam/trilium:latest
     container_name: trilium-app
-    hostname: trilium
+    hostname: ${BASE_HOST_NAME:-$HOSTNAME}
     restart: always
     pull_policy: always
     logging: *default-logging
+    environment:
+      TZ: ${TZ:-America/New_York}
     ports:
       - '172.17.0.1:59075:8080'
     volumes:
